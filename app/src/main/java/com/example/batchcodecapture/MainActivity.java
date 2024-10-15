@@ -1,6 +1,8 @@
 package com.example.batchcodecapture;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button button_move_to_scanning;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +23,20 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        button_move_to_scanning = findViewById(R.id.button_move_to_scanning);
+        button_move_to_scanning.setOnClickListener(v ->{
+
+
+        });
+
+
+
     }
+
+
+
+
+
+
 }
