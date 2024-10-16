@@ -1,6 +1,5 @@
 package com.example.batchcodecapture;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,11 +9,9 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.util.concurrent.ExecutionException;
 
 
 public class ScanningActivity extends AppCompatActivity {
@@ -52,7 +49,7 @@ public class ScanningActivity extends AppCompatActivity {
 
         try {
             cameraProvider.unbindAll();
-            cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview);
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview);
         } catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
