@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         button_move_to_scanning = findViewById(R.id.button_move_to_scanning);
         button_move_to_scanning.setOnClickListener(v ->{
-            Intent intent_scan = new Intent(MainActivity.this, ScanningActivity.class);
+
 
         });
 
