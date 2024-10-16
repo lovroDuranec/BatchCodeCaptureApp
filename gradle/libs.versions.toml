@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.1"
+agp = "8.5.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -7,8 +7,6 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
-camerax = "1.1.0"
-mlkit = "17.0.2"
 
 
 [libraries]
@@ -21,12 +19,13 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 #cameraX
-camerax.camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
-camerax.lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
-camerax.view = { group = "androidx.camera", name = "camera-view", version = "1.0.0-alpha32" }
+camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version = "1.3.4" }
+camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version = "1.3.4" }
+camerax-view = { group = "androidx.camera", name = "camera-view", version = "1.3.4" }
 
 #ML kit
-mlkit.barcode.scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }
+mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version = "17.3.0" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

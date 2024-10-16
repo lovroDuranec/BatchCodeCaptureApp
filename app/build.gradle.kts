@@ -47,5 +47,5 @@ dependencies {
     implementation(libs.camerax.view)
 
     //ML kit
-    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.mlkit.barcode)
 }
