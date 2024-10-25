@@ -112,10 +112,8 @@ public class ScanningActivity extends AppCompatActivity {
     private void processBarcodeResult(Barcode barcode){
         String barcodeData = barcode.getRawValue();
 
-        runOnUiThread(() -> {
-            Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show();
-
-        });
+        runOnUiThread(() -> Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show()
+        );
     }
 
     private void setPreviewViewLayout() {
