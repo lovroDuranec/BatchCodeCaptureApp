@@ -1,7 +1,6 @@
 package com.example.batchcodecapture;
 
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -73,7 +72,7 @@ public class ScanningActivity extends AppCompatActivity {
 
         //cameraExecutor
         cameraExecutor = Executors.newSingleThreadExecutor();
-        //barcodescanner
+        //barcode scanner
         barcodeScanner = BarcodeScanning.getClient();
 
         Button captureButton = findViewById(R.id.captureButton);
@@ -106,16 +105,12 @@ public class ScanningActivity extends AppCompatActivity {
             for (Barcode barcode : barcodes) {
                 processBarcodeResult(barcode);
             }
-        }).addOnFailureListener(e ->{
-            Toast.makeText(ScanningActivity.this, e.getMessage() + "MLkitCheckImage error", Toast.LENGTH_LONG).show();
-        }).addOnCompleteListener(task -> {
-            imageProxy.close();
-        });
+        }).addOnFailureListener(e ->Toast.makeText(ScanningActivity.this, e.getMessage() + "analyzeImage error", Toast.LENGTH_LONG).show()
+        ).addOnCompleteListener(task ->imageProxy.close());
     }
 
     private void processBarcodeResult(Barcode barcode){
         String barcodeData = barcode.getRawValue();
-        Rect boundingBox = barcode.getBoundingBox();
 
         runOnUiThread(() -> {
             Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show();
