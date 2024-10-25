@@ -114,7 +114,7 @@ public class ScanningActivity extends AppCompatActivity {
 
         runOnUiThread(() -> {
             Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show();
-            // You could update UI with boundingBox or display barcode data
+
         });
     }
 
