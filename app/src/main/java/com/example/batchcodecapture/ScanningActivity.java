@@ -1,24 +1,32 @@
 package com.example.batchcodecapture;
 
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
-
+import androidx.camera.core.ImageAnalysis;
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.common.InputImage;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.File;
@@ -33,6 +41,7 @@ public class ScanningActivity extends AppCompatActivity {
     private ImageCapture imageCapture;
     private PreviewView previewView;
     private ExecutorService cameraExecutor;
+    private BarcodeScanner barcodeScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +73,55 @@ public class ScanningActivity extends AppCompatActivity {
 
         //cameraExecutor
         cameraExecutor = Executors.newSingleThreadExecutor();
-
+        //barcodescanner
+        barcodeScanner = BarcodeScanning.getClient();
 
         Button captureButton = findViewById(R.id.captureButton);
         captureButton.setOnClickListener(v -> takePhoto());
-
-        //ML kit
     }
 
+    private void bindLifeCycle( ProcessCameraProvider cameraProvider){
+        Preview preview = new Preview.Builder().build();
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+        imageCapture = new ImageCapture.Builder().setTargetRotation(previewView.getDisplay().getRotation()).build();
+
+        ImageAnalysis imageAnalysis = new  ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build();
+        imageAnalysis.setAnalyzer(cameraExecutor, this::analyzeImage);
+
+        try {
+            cameraProvider.unbindAll();
+            cameraProvider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageCapture, imageAnalysis);
+        } catch (Exception e){
+            Toast.makeText(this, e.getMessage() + "bindLifeCycle error", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @OptIn(markerClass = ExperimentalGetImage.class)
+    private void analyzeImage(ImageProxy imageProxy) {
+        InputImage inputImage = InputImage.fromMediaImage(Objects.requireNonNull(imageProxy.getImage()), imageProxy.getImageInfo().getRotationDegrees());
+
+        barcodeScanner.process(inputImage).addOnSuccessListener(barcodes -> {
+            for (Barcode barcode : barcodes) {
+                processBarcodeResult(barcode);
+            }
+        }).addOnFailureListener(e ->{
+            Toast.makeText(ScanningActivity.this, e.getMessage() + "MLkitCheckImage error", Toast.LENGTH_LONG).show();
+        }).addOnCompleteListener(task -> {
+            imageProxy.close();
+        });
+    }
+
+    private void processBarcodeResult(Barcode barcode){
+        String barcodeData = barcode.getRawValue();
+        Rect boundingBox = barcode.getBoundingBox();
+
+        runOnUiThread(() -> {
+            Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show();
+            // You could update UI with boundingBox or display barcode data
+        });
+    }
 
     private void setPreviewViewLayout() {
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
@@ -87,21 +137,6 @@ public class ScanningActivity extends AppCompatActivity {
 
     private void requestCameraPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-    }
-
-    private void bindLifeCycle( ProcessCameraProvider cameraProvider){
-        Preview preview = new Preview.Builder().build();
-        preview.setSurfaceProvider(previewView.getSurfaceProvider());
-
-        imageCapture = new ImageCapture.Builder().setTargetRotation(previewView.getDisplay().getRotation()).build();
-
-        try {
-            cameraProvider.unbindAll();
-            cameraProvider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageCapture);
-        } catch (Exception e){
-            Toast.makeText(this, e.getMessage() + "bindLifeCycle error", Toast.LENGTH_LONG).show();
-        }
-
     }
 
     private void takePhoto(){
@@ -151,5 +186,6 @@ public class ScanningActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         cameraExecutor.shutdown();
+        barcodeScanner.close();
     }
 }
