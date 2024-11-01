@@ -45,12 +45,14 @@ public class ScanningActivity extends AppCompatActivity {
     private int frameCounter = 0;
     private static final int FRAME_CAPTURE_RATE = 3;
     private HashSet<String> scannedBarcodesCache = new HashSet<>();
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
+        db = new DatabaseHelper(this);
 
         previewView = findViewById(R.id.viewFinder);
         setPreviewViewLayout();
@@ -126,6 +128,8 @@ public class ScanningActivity extends AppCompatActivity {
 
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
             scannedBarcodesCache.add(barcodeData);
+            db.addentry(barcodeData);
+
             runOnUiThread(() -> Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show());
         }
     }
