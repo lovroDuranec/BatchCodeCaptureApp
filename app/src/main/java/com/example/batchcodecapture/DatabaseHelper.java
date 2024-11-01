@@ -3,6 +3,7 @@ package com.example.batchcodecapture;
 import android.content.ContentValues;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.database.sqlite.SQLiteOpenHelper;
@@ -49,5 +50,24 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         } else {
             System.out.println("SQL barcode success");
         }
+    }
+
+    public Cursor getAllBarcodes(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_NAME_BARCODE_STORAGE, null, null, null, null, null, null);
+    }
+
+    public void deleteEntry(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_BARCODE_STORAGE, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void UpdateEntry(int id, String newBarcode){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_BARCODE, newBarcode);
+        db.update(TABLE_NAME_BARCODE_STORAGE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 }

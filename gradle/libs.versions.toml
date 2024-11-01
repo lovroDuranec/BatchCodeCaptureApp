@@ -7,6 +7,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
+recyclerview = "1.3.2"
 
 
 [libraries]
@@ -25,6 +26,7 @@ camerax-view = { group = "androidx.camera", name = "camera-view", version = "1.3
 
 #ML kit
 mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version = "17.3.0" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 
 [plugins]
