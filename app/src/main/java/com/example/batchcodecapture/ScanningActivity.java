@@ -25,6 +25,7 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +42,9 @@ public class ScanningActivity extends AppCompatActivity {
     private PreviewView previewView;
     private ExecutorService cameraExecutor;
     private BarcodeScanner barcodeScanner;
+    private int frameCounter = 0;
+    private static final int FRAME_CAPTURE_RATE = 3;
+    private HashSet<String> scannedBarcodesCache = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,14 @@ public class ScanningActivity extends AppCompatActivity {
 
     @OptIn(markerClass = ExperimentalGetImage.class)
     private void analyzeImage(ImageProxy imageProxy) {
+        frameCounter+=1;
+        if (frameCounter%FRAME_CAPTURE_RATE != 0){
+            imageProxy.close();
+            return;
+        }
+        if (frameCounter >= Integer.MAX_VALUE -1){
+            frameCounter = 0;
+        }
         InputImage inputImage = InputImage.fromMediaImage(Objects.requireNonNull(imageProxy.getImage()), imageProxy.getImageInfo().getRotationDegrees());
 
         barcodeScanner.process(inputImage).addOnSuccessListener(barcodes -> {
@@ -112,8 +124,10 @@ public class ScanningActivity extends AppCompatActivity {
     private void processBarcodeResult(Barcode barcode){
         String barcodeData = barcode.getRawValue();
 
-        runOnUiThread(() -> Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show()
-        );
+        if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
+            scannedBarcodesCache.add(barcodeData);
+            runOnUiThread(() -> Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show());
+        }
     }
 
     private void setPreviewViewLayout() {
