@@ -28,7 +28,14 @@
         <activity
             android:name=".ScanningActivity"
             android:exported="false">
-
+        </activity>
+        <activity
+            android:name=".SessionActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".BarcodeActivity"
+            android:exported="false">
         </activity>
     </application>
 
