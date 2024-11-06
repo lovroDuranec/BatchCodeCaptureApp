@@ -1,12 +1,16 @@
 package com.example.batchcodecapture;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper{
@@ -58,4 +62,36 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void updateSessionID(){
         defaultSessionId +=1;
     }
-}
+
+    @SuppressLint("Range")
+    public List<String> getAllSessions() {
+        List<String> sessions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + COLUMN_SESSION_ID + " FROM " + TABLE_NAME_BARCODE_STORAGE, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                sessions.add(cursor.getString(cursor.getColumnIndex(COLUMN_SESSION_ID)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sessions;
+    }
+
+    @SuppressLint("Range")
+    public List<String> getBarcodesForSession(String sessionID){
+        List<String> barcodes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + COLUMN_BARCODE + " FROM " + TABLE_NAME_BARCODE_STORAGE + " WHERE " + COLUMN_SESSION_ID + " = ?", new String[]{sessionID});
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                barcodes.add(cursor.getString(cursor.getColumnIndex(COLUMN_BARCODE)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return barcodes;
+    }
+ }
