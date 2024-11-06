@@ -1,8 +1,11 @@
 package com.example.batchcodecapture;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.camera.core.ImageAnalysis;
 import androidx.annotation.NonNull;
@@ -19,6 +22,8 @@ import androidx.camera.view.PreviewView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
@@ -44,8 +49,10 @@ public class ScanningActivity extends AppCompatActivity {
     private BarcodeScanner barcodeScanner;
     private int frameCounter = 0;
     private static final int FRAME_CAPTURE_RATE = 3;
-    private HashSet<String> scannedBarcodesCache = new HashSet<>();
+    private final HashSet<String> scannedBarcodesCache = new HashSet<>();
     private DatabaseHelper db;
+    private ExecutorService dbExecutor;
+    private LinearLayout notificationContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +60,13 @@ public class ScanningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
         db = new DatabaseHelper(this);
+        notificationContainer = findViewById(R.id.notificationContainer);
 
         previewView = findViewById(R.id.viewFinder);
         setPreviewViewLayout();
 
         cameraExecutor = Executors.newSingleThreadExecutor();
-
+        dbExecutor = Executors.newSingleThreadExecutor();
         if (hasCameraPermission()) {
             startCamera();
         } else {
@@ -128,9 +136,10 @@ public class ScanningActivity extends AppCompatActivity {
 
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
             scannedBarcodesCache.add(barcodeData);
-            db.addentry(barcodeData);
+            db.updateSessionID();
+            dbExecutor.execute(() -> db.addentry((barcodeData)));
 
-            runOnUiThread(() -> Toast.makeText(this, "Barcode detected: " + barcodeData, Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> showStackedNotification(barcodeData));
         }
     }
 
@@ -193,10 +202,28 @@ public class ScanningActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    private void showStackedNotification(String message){
+        TextView notificationView = new TextView(this);
+        notificationView.setText(message);
+        notificationView.setBackgroundResource(R.drawable.notification_background);
+        notificationView.setTextColor(Color.WHITE);
+        notificationView.setPadding(12,12,12,12);
+
+        notificationContainer.addView(notificationView);
+
+        notificationView.setAlpha(0f);
+        notificationView.animate().alpha(1f).setDuration(300).start();
+        notificationView.postDelayed(() -> {
+            notificationView.animate().alpha(0f).setDuration(300).withEndAction(() -> {
+                notificationContainer.removeView(notificationView);
+            }).start();
+        }, 3000);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         cameraExecutor.shutdown();
+        dbExecutor.shutdown();
         barcodeScanner.close();
     }
 }

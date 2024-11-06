@@ -16,17 +16,20 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";
+    private static final String COLUMN_SESSION_ID = "session";
     private static final String COLUMN_BARCODE = "barcode";
-
+    private static int defaultSessionId = 1;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME_BARCODE_STORAGE +
-                "(" + COLUMN_ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_SESSION_ID + " TEXT, " +
                 COLUMN_BARCODE + " TEXT);";
         db.execSQL(query);
 
@@ -43,11 +46,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_BARCODE, barcode);
+        cv.put(COLUMN_SESSION_ID, String.valueOf(defaultSessionId));
         long result = db.insert(TABLE_NAME_BARCODE_STORAGE, null, cv);
         if (result   == -1) {
             System.out.println("SQL barcode failed");
         } else {
             System.out.println("SQL barcode success");
         }
+    }
+
+    public void updateSessionID(){
+        defaultSessionId +=1;
     }
 }
