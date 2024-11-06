@@ -60,6 +60,7 @@ public class ScanningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
         db = new DatabaseHelper(this);
+        db.updateSessionID();
         notificationContainer = findViewById(R.id.notificationContainer);
 
         previewView = findViewById(R.id.viewFinder);
@@ -136,7 +137,6 @@ public class ScanningActivity extends AppCompatActivity {
 
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
             scannedBarcodesCache.add(barcodeData);
-            db.updateSessionID();
             dbExecutor.execute(() -> db.addentry((barcodeData)));
 
             runOnUiThread(() -> showStackedNotification(barcodeData));
