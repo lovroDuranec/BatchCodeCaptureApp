@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     Button button_move_to_scanning;
+    Button getButton_move_to_storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         button_move_to_scanning.setOnClickListener(v ->{
             Intent intent_scan = new Intent(MainActivity.this, ScanningActivity.class);
             startActivity(intent_scan);
+        });
+
+        getButton_move_to_storage = findViewById(R.id.button_move_to_storage);
+        getButton_move_to_storage.setOnClickListener(v -> {
+            Intent intent_storage = new Intent(MainActivity.this, SessionActivity.class);
+            startActivity(intent_storage);
         });
 
 
