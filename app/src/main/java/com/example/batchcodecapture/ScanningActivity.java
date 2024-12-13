@@ -23,7 +23,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
@@ -53,6 +52,7 @@ public class ScanningActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private ExecutorService dbExecutor;
     private LinearLayout notificationContainer;
+    private boolean checkIfNewSessionNeeded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +60,8 @@ public class ScanningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
         db = new DatabaseHelper(this);
-        db.updateSessionID();
         notificationContainer = findViewById(R.id.notificationContainer);
-
+        checkIfNewSessionNeeded = true;
         previewView = findViewById(R.id.viewFinder);
         setPreviewViewLayout();
 
@@ -119,7 +118,7 @@ public class ScanningActivity extends AppCompatActivity {
             imageProxy.close();
             return;
         }
-        if (frameCounter >= Integer.MAX_VALUE -1){
+        if (frameCounter == Integer.MAX_VALUE - 1){
             frameCounter = 0;
         }
         InputImage inputImage = InputImage.fromMediaImage(Objects.requireNonNull(imageProxy.getImage()), imageProxy.getImageInfo().getRotationDegrees());
@@ -138,7 +137,10 @@ public class ScanningActivity extends AppCompatActivity {
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
             scannedBarcodesCache.add(barcodeData);
             dbExecutor.execute(() -> db.addentry((barcodeData)));
-
+            if (checkIfNewSessionNeeded){
+                db.updateSessionID();
+                checkIfNewSessionNeeded = false;
+            }
             runOnUiThread(() -> showStackedNotification(barcodeData));
         }
     }
@@ -213,11 +215,7 @@ public class ScanningActivity extends AppCompatActivity {
 
         notificationView.setAlpha(0f);
         notificationView.animate().alpha(1f).setDuration(300).start();
-        notificationView.postDelayed(() -> {
-            notificationView.animate().alpha(0f).setDuration(300).withEndAction(() -> {
-                notificationContainer.removeView(notificationView);
-            }).start();
-        }, 3000);
+        notificationView.postDelayed(() -> notificationView.animate().alpha(0f).setDuration(300).withEndAction(() -> notificationContainer.removeView(notificationView)).start(), 3000);
     }
     @Override
     protected void onDestroy() {

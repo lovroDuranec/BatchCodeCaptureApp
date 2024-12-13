@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import java.util.Collections;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public class SessionActivity extends AppCompatActivity {
         sessionListView = findViewById(R.id.sessionListView);
 
         List<String> sessions = db.getAllSessions();
+        Collections.reverse(sessions);
         sessionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sessions);
         sessionListView.setAdapter(sessionAdapter);
         sessionListView.setOnItemClickListener((parent, view, position, id) -> {

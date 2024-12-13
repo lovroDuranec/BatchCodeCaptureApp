@@ -16,13 +16,13 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Storage.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SESSION_ID = "session";
     private static final String COLUMN_BARCODE = "barcode";
-    private static int defaultSessionId = 1;
+    private static int defaultSessionId = 0;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
