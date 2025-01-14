@@ -2,10 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/app_background"
     android:orientation="vertical">
 
     <ListView
         android:id="@+id/barcodeListView"
         android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@drawable/custom_listview"
         android:layout_height="match_parent" />
 </LinearLayout>

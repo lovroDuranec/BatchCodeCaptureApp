@@ -89,8 +89,8 @@ public class ScanningActivity extends AppCompatActivity {
         //barcode scanner
         barcodeScanner = BarcodeScanning.getClient();
 
-        Button captureButton = findViewById(R.id.captureButton);
-        captureButton.setOnClickListener(v -> takePhoto());
+        Button exitButton = findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(v -> finish());
     }
 
     private void bindLifeCycle( ProcessCameraProvider cameraProvider){
@@ -161,26 +161,6 @@ public class ScanningActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
     }
 
-    private void takePhoto(){
-        if (imageCapture == null) return;
-
-        File photoFile = new File(getExternalFilesDir(null), "photo.jpg");
-        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
-
-        imageCapture.takePicture(outputFileOptions, cameraExecutor, new ImageCapture.OnImageSavedCallback() {
-            @Override
-            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                runOnUiThread(() -> Toast.makeText(ScanningActivity.this, "Photo captured successfully!", Toast.LENGTH_LONG).show());
-            }
-
-            @Override
-            public void onError(@NonNull ImageCaptureException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(ScanningActivity.this, e.getMessage() + "takePhoto error", Toast.LENGTH_LONG).show()
-                );
-            }
-        });
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -30,15 +30,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="16dp"/>
-    <Button
-        android:id="@+id/captureButton"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Capture"
+        android:text="Exit"
+        android:background="@drawable/custom_button_background"
+        style="@style/CustomButton"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="18dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
