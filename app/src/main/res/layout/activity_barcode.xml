@@ -5,10 +5,20 @@
     android:background="@drawable/app_background"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scanned Barcodes:"
+        android:textSize="20sp"
+        android:padding="16dp"
+        android:textColor="@color/black"/>
+
     <ListView
         android:id="@+id/barcodeListView"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:background="@drawable/custom_listview"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"
+        android:background="@drawable/custom_listview"/>
+
 </LinearLayout>

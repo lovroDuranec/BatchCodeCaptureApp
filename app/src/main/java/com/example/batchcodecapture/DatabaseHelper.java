@@ -16,8 +16,8 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Storage.db";
-    private static final int DATABASE_VERSION = 4;
-
+    private static final int DATABASE_VERSION = 6;
+    private static final String COLUMN_IMAGE_PATH = "image_path";
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SESSION_ID = "session";
@@ -34,7 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String query = "CREATE TABLE " + TABLE_NAME_BARCODE_STORAGE +
                 "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_SESSION_ID + " TEXT, " +
-                COLUMN_BARCODE + " TEXT);";
+                COLUMN_BARCODE + " TEXT, " +
+                COLUMN_IMAGE_PATH + " TEXT);";
         db.execSQL(query);
 
     }
@@ -46,11 +47,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-    void addentry(String barcode){
+    void addentry(String barcode, String imagePath){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_BARCODE, barcode);
         cv.put(COLUMN_SESSION_ID, String.valueOf(defaultSessionId));
+        cv.put(COLUMN_IMAGE_PATH, imagePath);
         long result = db.insert(TABLE_NAME_BARCODE_STORAGE, null, cv);
         if (result   == -1) {
             System.out.println("SQL barcode failed");
@@ -79,19 +81,30 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     @SuppressLint("Range")
-    public List<String> getBarcodesForSession(String sessionID){
-        List<String> barcodes = new ArrayList<>();
+    public List<BarcodeEntry> getBarcodesForSession(String sessionID) {
+        List<BarcodeEntry> entries = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT " + COLUMN_BARCODE + " FROM " + TABLE_NAME_BARCODE_STORAGE + " WHERE " + COLUMN_SESSION_ID + " = ?", new String[]{sessionID});
 
+        // Select both barcode and image path columns
+        String query = "SELECT " + COLUMN_BARCODE + ", " + COLUMN_IMAGE_PATH +
+                " FROM " + TABLE_NAME_BARCODE_STORAGE +
+                " WHERE " + COLUMN_SESSION_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{sessionID});
+
+        int barcodeIndex = cursor.getColumnIndex(COLUMN_BARCODE);
+        int imagePathIndex = cursor.getColumnIndex(COLUMN_IMAGE_PATH);
 
         if (cursor.moveToFirst()) {
             do {
-                barcodes.add(cursor.getString(cursor.getColumnIndex(COLUMN_BARCODE)));
+                // Handle possible -1 indexes if column not found
+                String barcode = barcodeIndex != -1 ? cursor.getString(barcodeIndex) : "";
+                String imagePath = imagePathIndex != -1 ? cursor.getString(imagePathIndex) : null;
+
+                entries.add(new BarcodeEntry(barcode, imagePath));
             } while (cursor.moveToNext());
         }
         cursor.close();
-
-        return barcodes;
+        return entries;
     }
  }

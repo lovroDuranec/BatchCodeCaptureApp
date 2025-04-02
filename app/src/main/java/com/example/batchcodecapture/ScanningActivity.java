@@ -1,7 +1,9 @@
 package com.example.batchcodecapture;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,6 +31,8 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -124,19 +128,23 @@ public class ScanningActivity extends AppCompatActivity {
         InputImage inputImage = InputImage.fromMediaImage(Objects.requireNonNull(imageProxy.getImage()), imageProxy.getImageInfo().getRotationDegrees());
 
         barcodeScanner.process(inputImage).addOnSuccessListener(barcodes -> {
+            Bitmap bitmap = imageProxy.toBitmap();
             for (Barcode barcode : barcodes) {
-                processBarcodeResult(barcode);
+                processBarcodeResult(barcode, bitmap);
             }
         }).addOnFailureListener(e ->Toast.makeText(ScanningActivity.this, e.getMessage() + "analyzeImage error", Toast.LENGTH_LONG).show()
         ).addOnCompleteListener(task ->imageProxy.close());
     }
 
-    private void processBarcodeResult(Barcode barcode){
+    private void processBarcodeResult(Barcode barcode, Bitmap bitmap){
         String barcodeData = barcode.getRawValue();
 
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
             scannedBarcodesCache.add(barcodeData);
-            dbExecutor.execute(() -> db.addentry((barcodeData)));
+
+            String savedImagePath = captureBarcodeImage(barcode, bitmap);
+
+            dbExecutor.execute(() -> db.addentry(barcodeData, savedImagePath));
             if (checkIfNewSessionNeeded){
                 db.updateSessionID();
                 checkIfNewSessionNeeded = false;
@@ -197,6 +205,48 @@ public class ScanningActivity extends AppCompatActivity {
         notificationView.animate().alpha(1f).setDuration(300).start();
         notificationView.postDelayed(() -> notificationView.animate().alpha(0f).setDuration(300).withEndAction(() -> notificationContainer.removeView(notificationView)).start(), 3000);
     }
+
+    private String captureBarcodeImage(Barcode barcode, Bitmap bitmap){
+        Rect bounds = barcode.getBoundingBox();
+        if (bounds != null && bitmap != null) {
+            Bitmap croppedBitmap = cropBitmap(bitmap, bounds);
+            if (croppedBitmap != null) {
+                return saveImageToFile(croppedBitmap);
+            }
+        }
+        return null;
+    }
+    private Bitmap cropBitmap(Bitmap bitmap, Rect bounds){
+        try {
+            // Ensure bounds are within the Bitmap dimensions
+            int left = Math.max(0, bounds.left);
+            int top = Math.max(0, bounds.top);
+            int right = Math.min(bitmap.getWidth(), bounds.right);
+            int bottom = Math.min(bitmap.getHeight(), bounds.bottom);
+            int width = right - left;
+            int height = bottom - top;
+
+            if (width <= 0 || height <= 0) {
+                return null;
+            }
+            return Bitmap.createBitmap(bitmap, left, top, width, height);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String saveImageToFile(Bitmap bitmap) {
+        File imageFile = new File(getFilesDir(), "barcode_image_" + System.currentTimeMillis() + ".png");
+        try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            return imageFile.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
