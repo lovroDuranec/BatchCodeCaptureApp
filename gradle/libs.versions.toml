@@ -29,7 +29,8 @@ mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version
 mockito-core = { group = "org.mockito", name = "mockito-core", version = "5.3.0" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version = "5.3.0" }
 #robolectric
-robolectric = { group = "org.robolectric", name = "robolectric", version = "4.9.2" }
+robolectric = { group = "org.robolectric", name = "robolectric", version = "4.10.3" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 
