@@ -48,4 +48,8 @@ dependencies {
 
     //ML kit
     implementation(libs.mlkit.barcode)
+    //za testiranje
+    testImplementation(libs.mockito.core)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.robolectric)
 }

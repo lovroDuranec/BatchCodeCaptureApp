@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -216,9 +215,9 @@ public class ScanningActivity extends AppCompatActivity {
         }
         return null;
     }
-    private Bitmap cropBitmap(Bitmap bitmap, Rect bounds){
+
+    public static Bitmap cropBitmap(Bitmap bitmap, Rect bounds) {
         try {
-            // Ensure bounds are within the Bitmap dimensions
             int left = Math.max(0, bounds.left);
             int top = Math.max(0, bounds.top);
             int right = Math.min(bitmap.getWidth(), bounds.right);
