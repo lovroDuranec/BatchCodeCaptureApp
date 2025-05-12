@@ -28,6 +28,7 @@ mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version
 #mockito
 mockito-core = { group = "org.mockito", name = "mockito-core", version = "5.3.0" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version = "5.3.0" }
+androidx-espresso = { group = "androidx.test.espresso", name = "espresso-intents", version = "3.6.1" }
 #robolectric
 robolectric = { group = "org.robolectric", name = "robolectric", version = "4.10.3" }
 

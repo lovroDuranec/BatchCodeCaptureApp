@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
+    androidTestImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
@@ -50,7 +51,9 @@ dependencies {
     implementation(libs.mlkit.barcode)
     //za testiranje
     testImplementation(libs.mockito.core)
+    testImplementation(libs.robolectric)
+
     androidTestImplementation(libs.mockito.android)
-    androidTestImplementation(libs.robolectric)
+    androidTestImplementation(libs.androidx.espresso)
 
 }
