@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SESSION_ID = "session";
     private static final String COLUMN_BARCODE = "barcode";
-    private static int defaultSessionId = 0;
+    static int defaultSessionId = 0;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

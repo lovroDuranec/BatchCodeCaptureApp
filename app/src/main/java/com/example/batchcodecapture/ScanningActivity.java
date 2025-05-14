@@ -43,18 +43,18 @@ import android.Manifest;
 
 public class ScanningActivity extends AppCompatActivity {
 
-    private static final int CAMERA_REQUEST_CODE = 1001;
+    static final int CAMERA_REQUEST_CODE = 1001;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageCapture imageCapture;
     private PreviewView previewView;
-    private ExecutorService cameraExecutor;
+    ExecutorService cameraExecutor;
     private BarcodeScanner barcodeScanner;
     private int frameCounter = 0;
     private static final int FRAME_CAPTURE_RATE = 3;
-    private final HashSet<String> scannedBarcodesCache = new HashSet<>();
-    private DatabaseHelper db;
-    private ExecutorService dbExecutor;
-    private LinearLayout notificationContainer;
+    final HashSet<String> scannedBarcodesCache = new HashSet<>();
+    DatabaseHelper db;
+    ExecutorService dbExecutor;
+    LinearLayout notificationContainer;
     private boolean checkIfNewSessionNeeded;
 
     @Override
@@ -135,7 +135,7 @@ public class ScanningActivity extends AppCompatActivity {
         ).addOnCompleteListener(task ->imageProxy.close());
     }
 
-    private void processBarcodeResult(Barcode barcode, Bitmap bitmap){
+    void processBarcodeResult(Barcode barcode, Bitmap bitmap){
         String barcodeData = barcode.getRawValue();
 
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)){
@@ -160,7 +160,7 @@ public class ScanningActivity extends AppCompatActivity {
         previewView.setLayoutParams(layoutParams);
     }
 
-    private boolean hasCameraPermission() {
+    boolean hasCameraPermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -191,7 +191,7 @@ public class ScanningActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
-    private void showStackedNotification(String message){
+    void showStackedNotification(String message){
         TextView notificationView = new TextView(this);
         notificationView.setText(message);
         notificationView.setBackgroundResource(R.drawable.notification_background);
@@ -205,7 +205,7 @@ public class ScanningActivity extends AppCompatActivity {
         notificationView.postDelayed(() -> notificationView.animate().alpha(0f).setDuration(300).withEndAction(() -> notificationContainer.removeView(notificationView)).start(), 3000);
     }
 
-    private String captureBarcodeImage(Barcode barcode, Bitmap bitmap){
+    String captureBarcodeImage(Barcode barcode, Bitmap bitmap){
         Rect bounds = barcode.getBoundingBox();
         if (bounds != null && bitmap != null) {
             Bitmap croppedBitmap = cropBitmap(bitmap, bounds);
