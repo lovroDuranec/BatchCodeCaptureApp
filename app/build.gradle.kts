@@ -15,6 +15,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true // Enable Android resources for tests
+        }
+    }
 
     buildTypes {
         release {
@@ -50,8 +55,9 @@ dependencies {
     //ML kit
     implementation(libs.mlkit.barcode)
     //za testiranje
-    testImplementation(libs.mockito.core)
     testImplementation(libs.robolectric)
+    testImplementation(libs.android.core)
+    testImplementation(libs.android.junit)
 
     androidTestImplementation(libs.mockito.android)
     androidTestImplementation(libs.androidx.espresso)

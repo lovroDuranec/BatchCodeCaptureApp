@@ -15,15 +15,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.Nullable;
 
 public class BarcodeActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    DatabaseHelper db;
     private ListView barcodeListView;
-    private BarcodeAdapter barcodeAdapter;
+    BarcodeAdapter barcodeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class BarcodeActivity extends AppCompatActivity {
     }
 
 
-    private class BarcodeAdapter extends ArrayAdapter<BarcodeEntry> {
+    static class BarcodeAdapter extends ArrayAdapter<BarcodeEntry> {
 
         BarcodeAdapter(Context context, List<BarcodeEntry> entries) {
             super(context, 0, entries);
@@ -61,7 +62,6 @@ public class BarcodeActivity extends AppCompatActivity {
 
             barcodeText.setText(entry.getBarcodeData());
 
-            // Load image from storage
             if (entry.getImagePath() != null) {
                 Bitmap bitmap = BitmapFactory.decodeFile(entry.getImagePath());
                 if (bitmap != null) {
