@@ -48,7 +48,7 @@ public class ScanningActivity extends AppCompatActivity {
     private ImageCapture imageCapture;
     private PreviewView previewView;
     ExecutorService cameraExecutor;
-    private BarcodeScanner barcodeScanner;
+    public BarcodeScanner barcodeScanner;
     private int frameCounter = 0;
     private static final int FRAME_CAPTURE_RATE = 3;
     final HashSet<String> scannedBarcodesCache = new HashSet<>();

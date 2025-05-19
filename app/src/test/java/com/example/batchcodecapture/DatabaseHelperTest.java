@@ -106,7 +106,33 @@ public class DatabaseHelperTest {
         dbHelper.onUpgrade(database, 6, 7);
         dbHelper.addentry("test", "/test/path");
         Cursor cursor = database.rawQuery("SELECT * FROM Barcode_storage", null);
-        assertEquals(1, cursor.getCount()); // New entry after upgrade
+        assertEquals(1, cursor.getCount());
         cursor.close();
+    }
+
+    @Test
+    public void testAddEntryWithNullAndEmptyValues() {
+        dbHelper.addentry(null, null);
+        dbHelper.addentry("", "");
+
+        List<BarcodeEntry> entries = dbHelper.getBarcodesForSession(String.valueOf(DatabaseHelper.defaultSessionId));
+        assertTrue(entries.size() >= 2);
+
+        boolean hasNullEntry = false;
+        for (BarcodeEntry entry : entries) {
+            if (entry.getBarcodeData() == null || entry.getImagePath() == null ||
+                    entry.getBarcodeData().isEmpty() || entry.getImagePath().isEmpty()) {
+                hasNullEntry = true;
+                break;
+            }
+        }
+        assertTrue(hasNullEntry);
+    }
+
+    @Test
+    public void testGetBarcodesForNonExistentSession() {
+        List<BarcodeEntry> entries = dbHelper.getBarcodesForSession("non_existent_session");
+        assertNotNull(entries);
+        assertTrue(entries.isEmpty());
     }
 }
