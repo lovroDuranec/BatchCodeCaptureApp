@@ -1,4 +1,4 @@
-package com.example.batchcodecapture;
+package com.example.batchcodecapture.data;
 
 public class BarcodeEntry {
     private String barcodeData;

@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.batchcodecapture.camera.CameraManager;
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.DatabaseHelper;
 import com.example.batchcodecapture.ui.NotificationHelper;
 import com.example.batchcodecapture.utils.ImageUtils;
 import com.google.mlkit.vision.barcode.common.Barcode;

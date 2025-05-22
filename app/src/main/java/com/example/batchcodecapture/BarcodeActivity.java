@@ -17,7 +17,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.BarcodeEntry;
+import com.example.batchcodecapture.data.DatabaseHelper;
 
 import org.jetbrains.annotations.Nullable;
 

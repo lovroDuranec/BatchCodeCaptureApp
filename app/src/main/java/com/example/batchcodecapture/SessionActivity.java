@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.DatabaseHelper;
 
 import java.util.Collections;
 import java.util.List;

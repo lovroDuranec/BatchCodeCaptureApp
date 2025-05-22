@@ -13,7 +13,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.BarcodeEntry;
+import com.example.batchcodecapture.data.DatabaseHelper;
 
 @RunWith(AndroidJUnit4.class)
 public class BarcodeActivityTest {

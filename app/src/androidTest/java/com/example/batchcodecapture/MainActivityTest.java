@@ -1,14 +1,8 @@
 package com.example.batchcodecapture;
 
-import android.content.Intent;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import org.junit.After;
-import org.junit.Before;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

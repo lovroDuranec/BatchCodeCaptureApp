@@ -20,7 +20,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.DatabaseHelper;
 
 @RunWith(AndroidJUnit4.class)
 public class SessionActivityTest {

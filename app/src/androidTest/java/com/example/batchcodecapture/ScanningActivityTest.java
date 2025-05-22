@@ -1,12 +1,8 @@
 package com.example.batchcodecapture;
 
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +11,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -24,20 +19,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.camera.view.PreviewView;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.batchcodecapture.camera.CameraManager;
-import com.example.batchcodecapture.ui.NotificationHelper;
 import com.google.mlkit.vision.barcode.common.Barcode;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -8,6 +8,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+import com.example.batchcodecapture.data.Session;
+
 public class SessionTest {
 
     @Test

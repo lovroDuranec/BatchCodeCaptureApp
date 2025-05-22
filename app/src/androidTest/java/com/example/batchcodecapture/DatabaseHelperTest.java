@@ -13,7 +13,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import com.example.batchcodecapture.db.DatabaseHelper;
+import com.example.batchcodecapture.data.BarcodeEntry;
+import com.example.batchcodecapture.data.DatabaseHelper;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseHelperTest {

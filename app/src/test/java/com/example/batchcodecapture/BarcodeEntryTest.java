@@ -3,6 +3,8 @@ package com.example.batchcodecapture;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import com.example.batchcodecapture.data.BarcodeEntry;
+
 public class BarcodeEntryTest {
 
     @Test

@@ -1,9 +1,7 @@
 package com.example.batchcodecapture;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
+
+import com.example.batchcodecapture.data.BarcodeEntry;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {Build.VERSION_CODES.P}, manifest = Config.NONE)
