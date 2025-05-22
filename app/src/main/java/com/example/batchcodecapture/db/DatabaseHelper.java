@@ -1,4 +1,4 @@
-package com.example.batchcodecapture;
+package com.example.batchcodecapture.db;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.batchcodecapture.BarcodeEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SESSION_ID = "session";
     private static final String COLUMN_BARCODE = "barcode";
-    static int defaultSessionId = 0;
+    public static int defaultSessionId = 0;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -47,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-    void addentry(String barcode, String imagePath){
+    public void addentry(String barcode, String imagePath){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_BARCODE, barcode);

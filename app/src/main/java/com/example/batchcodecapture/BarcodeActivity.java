@@ -15,8 +15,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.batchcodecapture.db.DatabaseHelper;
 
 import org.jetbrains.annotations.Nullable;
 

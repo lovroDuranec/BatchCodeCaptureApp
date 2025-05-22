@@ -15,6 +15,8 @@ import org.robolectric.annotation.Config;
 import java.util.List;
 import static org.junit.Assert.*;
 
+import com.example.batchcodecapture.db.DatabaseHelper;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.TIRAMISU)
 public class DatabaseHelperTest {
