@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Storage.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String COLUMN_IMAGE_PATH = "image_path";
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";

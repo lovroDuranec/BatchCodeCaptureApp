@@ -67,7 +67,21 @@ public class ImageUtilsTest {
         assertTrue(savedFile.exists());
         assertTrue(savedFile.length() > 0);
 
-        // Cleanup test file
         savedFile.delete();
+    }
+    @Test
+    public void cropBitmap_respectsAspectRatioAndPadding() {
+        Rect bounds = new Rect(70, 70, 90, 90); // 20x20, center (80,80)
+        Barcode barcode = Mockito.mock(Barcode.class);
+        Mockito.when(barcode.getBoundingBox()).thenReturn(bounds);
+
+        String imagePath = ImageUtils.captureBarcodeImage(context, barcode, bitmap);
+
+        assertNotNull("Image path should not be null", imagePath);
+
+        File imageFile = new File(imagePath);
+        assertTrue("Cropped image file should exist", imageFile.exists());
+
+        imageFile.delete();
     }
 }

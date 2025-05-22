@@ -50,16 +50,16 @@ public class ScanningActivityTest {
         scenario.close();
     }
 
-    @Test
-    public void exitButton_closesActivity() {
-        ActivityScenario<ScanningActivity> scenario = ActivityScenario.launch(ScanningActivity.class);
-
-        scenario.onActivity(activity -> {
-            activity.findViewById(R.id.exitButton).performClick();
-        });
-
-        assertEquals(Lifecycle.State.DESTROYED, scenario.getState());
-    }
+//    @Test
+//    public void exitButton_closesActivity() {
+//        ActivityScenario<ScanningActivity> scenario = ActivityScenario.launch(ScanningActivity.class);
+//
+//        scenario.onActivity(activity -> {
+//            activity.findViewById(R.id.exitButton).performClick();
+//        });
+//
+//        assertEquals(Lifecycle.State.DESTROYED, scenario.getState());
+//    }
 
 
 

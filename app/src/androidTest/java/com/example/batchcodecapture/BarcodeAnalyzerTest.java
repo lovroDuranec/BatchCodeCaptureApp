@@ -52,7 +52,12 @@ public class BarcodeAnalyzerTest {
         mockLogger = mock(Logger.class);
         mockImageProxy = createMockImageProxy();
 
-        barcodeAnalyzer = new BarcodeAnalyzer(mockCallback, mockLogger);
+        barcodeAnalyzer = new BarcodeAnalyzer(mockCallback, mockLogger) {
+            @Override
+            protected Bitmap getBitmapFromImageProxy(ImageProxy imageProxy) {
+                return Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+            }
+        };
     }
 
     private ImageProxy createMockImageProxy() {

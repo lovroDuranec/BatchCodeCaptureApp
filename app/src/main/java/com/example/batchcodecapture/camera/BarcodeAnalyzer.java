@@ -1,6 +1,7 @@
 package com.example.batchcodecapture.camera;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 
 import com.example.batchcodecapture.utils.BarcodeCallback;
+import com.example.batchcodecapture.utils.ImageUtils;
 import com.example.batchcodecapture.utils.Logger;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -59,15 +61,17 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
             frameCounter = 0;
         }
 
+        int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
         InputImage inputImage = InputImage.fromMediaImage(
-                Objects.requireNonNull(imageProxy.getImage()),
-                imageProxy.getImageInfo().getRotationDegrees());
+                Objects.requireNonNull(imageProxy.getImage()), rotationDegrees);
 
         barcodeScanner.process(inputImage)
                 .addOnSuccessListener(barcodes -> {
-                    Bitmap bitmap = imageProxy.toBitmap();
+                    Bitmap bitmap = getBitmapFromImageProxy(imageProxy);
+                    Bitmap rotatedBitmap = ImageUtils.rotateBitmap(bitmap, rotationDegrees);
+
                     for (Barcode barcode : barcodes) {
-                        callback.onBarcodeDetected(barcode, bitmap);
+                        callback.onBarcodeDetected(barcode, rotatedBitmap);
                     }
                 })
                 .addOnFailureListener(e ->
@@ -75,7 +79,14 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
                 .addOnCompleteListener(task -> imageProxy.close());
     }
 
+    protected Bitmap getBitmapFromImageProxy(ImageProxy imageProxy) {
+        return imageProxy.toBitmap();
+    }
+
+
     public void close() {
         barcodeScanner.close();
     }
+
+
 }

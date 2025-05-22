@@ -2,6 +2,7 @@ package com.example.batchcodecapture.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 
 import com.google.mlkit.vision.barcode.common.Barcode;
@@ -25,11 +26,33 @@ public class ImageUtils {
 
     private static Bitmap cropBitmap(Bitmap bitmap, Rect bounds) {
         try {
-            int left = Math.max(0, bounds.left);
-            int top = Math.max(0, bounds.top);
-            int width = Math.min(bitmap.getWidth(), bounds.right) - left;
-            int height = Math.min(bitmap.getHeight(), bounds.bottom) - top;
-            return Bitmap.createBitmap(bitmap, left, top, width, height);
+            int  targetAspectRatio = 2;
+            int padding = 20;
+            int centerX = bounds.centerX();
+            int centerY = bounds.centerY();
+            int origWidth = bounds.width() + 2 * padding;
+            int origHeight = bounds.height() + 2 * padding;
+            int targetWidth;
+            int targetHeight;
+
+            if (origWidth / (float) origHeight > targetAspectRatio) {
+                targetWidth = origWidth;
+                targetHeight = Math.round((float) targetWidth / targetAspectRatio);
+            } else {
+                targetHeight = origHeight;
+                targetWidth = Math.round((float)targetHeight * targetAspectRatio);
+            }
+            int left = centerX - targetWidth / 2;
+            int top = centerY - targetHeight / 2;
+            left = Math.max(0, left);
+            top = Math.max(0, top);
+            if (left + targetWidth > bitmap.getWidth()) {
+                targetWidth = bitmap.getWidth() - left;
+            }
+            if (top + targetHeight > bitmap.getHeight()) {
+                targetHeight = bitmap.getHeight() - top;
+            }
+            return Bitmap.createBitmap(bitmap, left, top, targetWidth, targetHeight);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -45,5 +68,11 @@ public class ImageUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }
