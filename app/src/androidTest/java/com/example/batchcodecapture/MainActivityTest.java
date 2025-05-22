@@ -26,14 +26,6 @@ public class MainActivityTest {
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testScanButtonLaunchesScanningActivity() {
         onView(withId(R.id.button_move_to_scanning)).perform(click());
@@ -46,9 +38,4 @@ public class MainActivityTest {
         intended(hasComponent(SessionActivity.class.getName()));
     }
 
-    @Test
-    public void testButtonsExist() {
-        onView(withId(R.id.button_move_to_scanning)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_move_to_storage)).check(matches(isDisplayed()));
-    }
 }

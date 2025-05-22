@@ -33,9 +33,9 @@ public class ScanningActivity extends AppCompatActivity {
     private boolean checkIfNewSessionNeeded = true;
 
     private CameraManager cameraManager;
-    private NotificationHelper notificationHelper;
-    private DatabaseHelper db;
-    private ExecutorService dbExecutor;
+    NotificationHelper notificationHelper;
+    DatabaseHelper db;
+    ExecutorService dbExecutor;
 
     final HashSet<String> scannedBarcodesCache = new HashSet<>();
 
@@ -62,7 +62,7 @@ public class ScanningActivity extends AppCompatActivity {
         findViewById(R.id.exitButton).setOnClickListener(v -> finish());
     }
 
-    private void onBarcodeScanned(Barcode barcode, Bitmap bitmap) {
+    void onBarcodeScanned(Barcode barcode, Bitmap bitmap) {
         String barcodeData = barcode.getRawValue();
         if (barcodeData != null && !scannedBarcodesCache.contains(barcodeData)) {
             scannedBarcodesCache.add(barcodeData);

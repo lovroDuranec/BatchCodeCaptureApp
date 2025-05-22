@@ -17,6 +17,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-810060431">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="HONOR REA-NX9" value="120" />
+                  <entry key="Test_31" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-555075132">
           <value>
             <AndroidTestResultsTableState>
@@ -49,6 +63,7 @@
               <option name="preferredColumnWidths">
                 <map>
                   <entry key="Duration" value="90" />
+                  <entry key="HONOR REA-NX9" value="120" />
                   <entry key="Test_31" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
