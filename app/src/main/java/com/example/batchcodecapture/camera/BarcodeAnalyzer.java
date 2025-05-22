@@ -9,6 +9,8 @@ import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 
+import com.example.batchcodecapture.utils.BarcodeCallback;
+import com.example.batchcodecapture.utils.Logger;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
@@ -17,19 +19,31 @@ import com.google.mlkit.vision.common.InputImage;
 import java.util.Objects;
 
 public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
-
-    private final BarcodeScanner barcodeScanner;
+    private BarcodeScanner barcodeScanner;
     private final BarcodeCallback callback;
+    private final Logger logger;
     private int frameCounter = 0;
     private static final int FRAME_CAPTURE_RATE = 3;
 
-    public interface BarcodeCallback {
-        void onBarcodeDetected(Barcode barcode, Bitmap bitmap);
+    public BarcodeAnalyzer(BarcodeCallback callback, Logger logger) {
+        this.callback = callback;
+        this.logger = logger;
+        this.barcodeScanner = BarcodeScanning.getClient();
     }
 
     public BarcodeAnalyzer(BarcodeCallback callback) {
-        this.callback = callback;
-        this.barcodeScanner = BarcodeScanning.getClient();
+        this(callback, new Logger() {
+            @Override
+            public void logError(String tag, String message) {
+
+            }
+        });
+    }
+
+
+    public void setBarcodeScanner(BarcodeScanner scanner) {
+        this.barcodeScanner.close();
+        this.barcodeScanner = scanner;
     }
 
     @OptIn(markerClass = ExperimentalGetImage.class)
@@ -56,7 +70,8 @@ public class BarcodeAnalyzer implements ImageAnalysis.Analyzer {
                         callback.onBarcodeDetected(barcode, bitmap);
                     }
                 })
-                .addOnFailureListener(e -> Log.e("BarcodeAnalyzer", "Error: " + e.getMessage()))
+                .addOnFailureListener(e ->
+                        logger.logError("BarcodeAnalyzer", "Error: " + e.getMessage()))
                 .addOnCompleteListener(task -> imageProxy.close());
     }
 

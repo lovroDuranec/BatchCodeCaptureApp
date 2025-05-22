@@ -13,6 +13,8 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.batchcodecapture.utils.BarcodeCallback;
+import com.example.batchcodecapture.utils.Logger;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutorService;
@@ -27,7 +29,7 @@ public class CameraManager {
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
-    public CameraManager(Context context, PreviewView previewView, BarcodeAnalyzer.BarcodeCallback callback) {
+    public CameraManager(Context context, PreviewView previewView, BarcodeCallback callback) {
         this.context = context;
         this.previewView = previewView;
         this.barcodeAnalyzer = new BarcodeAnalyzer(callback);
