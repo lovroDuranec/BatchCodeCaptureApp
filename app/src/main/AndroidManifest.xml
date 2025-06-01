@@ -41,6 +41,10 @@
             android:name=".TestActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".TestApplication"
+            tools:replace="android:name" >
+        </activity>
     </application>
 
 </manifest>

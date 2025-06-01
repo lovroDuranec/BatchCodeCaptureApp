@@ -7,13 +7,13 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        testApplicationId = "com.example.batchcodecapture.test"
+        testInstrumentationRunner = "com.example.batchcodecapture.CustomTestRunner"
         applicationId = "com.example.batchcodecapture"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {
         unitTests {

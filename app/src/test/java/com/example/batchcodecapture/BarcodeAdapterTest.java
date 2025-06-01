@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 
 import com.example.batchcodecapture.data.BarcodeEntry;
 
+
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {Build.VERSION_CODES.P}, manifest = Config.NONE)
 public class BarcodeAdapterTest {
@@ -39,7 +40,7 @@ public class BarcodeAdapterTest {
 
     @Test
     public void getView_SetsBarcodeTextCorrectly() {
-        BarcodeEntry entry = new BarcodeEntry("123456", null);
+        BarcodeEntry entry = new BarcodeEntry("123456", null, "2024-06-01 12:00:00");
         entries.add(entry);
 
         View view = adapter.getView(0, null, null);
@@ -48,8 +49,18 @@ public class BarcodeAdapterTest {
     }
 
     @Test
+    public void getView_SetsTimestampCorrectly() {
+        BarcodeEntry entry = new BarcodeEntry("7891011", null, "2024-06-01 13:30:00");
+        entries.add(entry);
+
+        View view = adapter.getView(0, null, null);
+        TextView timeView = view.findViewById(R.id.barcodeTime);
+        assertEquals("2024-06-01 13:30:00", timeView.getText().toString());
+    }
+
+    @Test
     public void getView_WithNullImagePath_SetsDefaultImage() {
-        BarcodeEntry entry = new BarcodeEntry("data", null);
+        BarcodeEntry entry = new BarcodeEntry("data", null, "2024-06-01 14:00:00");
         entries.add(entry);
 
         View view = adapter.getView(0, null, null);
@@ -59,7 +70,7 @@ public class BarcodeAdapterTest {
 
     @Test
     public void getView_WithInvalidImagePath_SetsDefaultImage() {
-        BarcodeEntry entry = new BarcodeEntry("data", "/invalid/path");
+        BarcodeEntry entry = new BarcodeEntry("data", "/invalid/path", "2024-06-01 14:10:00");
         entries.add(entry);
 
         View view = adapter.getView(0, null, null);
@@ -75,7 +86,7 @@ public class BarcodeAdapterTest {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         }
 
-        BarcodeEntry entry = new BarcodeEntry("data", tempFile.getAbsolutePath());
+        BarcodeEntry entry = new BarcodeEntry("data", tempFile.getAbsolutePath(), "2024-06-01 14:20:00");
         entries.add(entry);
 
         View view = adapter.getView(0, null, null);

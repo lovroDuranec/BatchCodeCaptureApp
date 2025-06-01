@@ -11,6 +11,11 @@ public class BarcodeEntry {
         this.timestamp = timestamp;
     }
 
+    public BarcodeEntry(String barcodeData, String imagePath) {
+        this.barcodeData = barcodeData;
+        this.imagePath = imagePath;
+    }
+
     public String getBarcodeData() { return barcodeData; }
 
     public String getImagePath() { return imagePath; }

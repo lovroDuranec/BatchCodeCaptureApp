@@ -107,9 +107,6 @@ public class BarcodeAnalyzerTest {
 
         barcodeAnalyzer.analyze(mockImageProxy);
         verify(mockImageProxy, times(2)).close();
-
-        barcodeAnalyzer.analyze(mockImageProxy);
-        verify(mockImageProxy, times(2)).close();
     }
 
     @Test

@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-11-06T17:16:50.092254500Z">
+        <DropdownSelection timestamp="2025-06-01T18:58:15.107982800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=9WV4C18809005308" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Lovro\.android\avd\Test_31.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -15,8 +15,19 @@
       </SelectionState>
       <SelectionState runConfigName="Tests in 'com.example.batchcodecapture'">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2025-06-01T18:59:42.127066800Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Lovro\.android\avd\Test_31.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="All Tests">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="BarcodeActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

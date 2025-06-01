@@ -1,5 +1,6 @@
 package com.example.batchcodecapture;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,16 +32,22 @@ public class BarcodeActivity extends AppCompatActivity {
     DatabaseHelper db;
     private ListView barcodeListView;
     BarcodeAdapter barcodeAdapter;
+    List<BarcodeEntry> barcodeEntries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode);
-        db = new DatabaseHelper(this);
+        Application app = (Application) getApplicationContext();
+        if (app instanceof TestApplication) {
+            db = ((TestApplication) app).getDatabaseHelper();
+        } else {
+            db = new DatabaseHelper(this);
+        }
         barcodeListView = findViewById(R.id.barcodeListView);
 
         String sessionId = getIntent().getStringExtra("SESSION_ID");
-        List<BarcodeEntry> barcodeEntries = db.getBarcodesForSession(sessionId);
+        barcodeEntries = db.getBarcodesForSession(sessionId);
 
         barcodeAdapter = new BarcodeAdapter(this, barcodeEntries);
         barcodeListView.setAdapter(barcodeAdapter);
@@ -93,7 +100,7 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }
 
-    private void showBarcodeDialog(String barcodeText, String imagePath) {
+    void showBarcodeDialog(String barcodeText, String imagePath) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_barcode_detail, null);
@@ -116,6 +123,10 @@ public class BarcodeActivity extends AppCompatActivity {
         closeButton.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    public List<BarcodeEntry> getBarcodeEntries() {
+        return barcodeEntries;
     }
 
 }
