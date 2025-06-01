@@ -16,12 +16,13 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Storage.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 10;
     private static final String COLUMN_IMAGE_PATH = "image_path";
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SESSION_ID = "session";
     private static final String COLUMN_BARCODE = "barcode";
+    private static final String COLUMN_TIMESTAMP = "timestamp";
     public static int defaultSessionId = 0;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,7 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_SESSION_ID + " TEXT, " +
                 COLUMN_BARCODE + " TEXT, " +
-                COLUMN_IMAGE_PATH + " TEXT);";
+                COLUMN_IMAGE_PATH + " TEXT, " +
+                COLUMN_TIMESTAMP + " TEXT DEFAULT (datetime('now','localtime')));";
+
         db.execSQL(query);
 
     }
@@ -86,8 +89,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Select both barcode and image path columns
-        String query = "SELECT " + COLUMN_BARCODE + ", " + COLUMN_IMAGE_PATH +
-                " FROM " + TABLE_NAME_BARCODE_STORAGE +
+        String query = "SELECT " + COLUMN_BARCODE + ", " + COLUMN_IMAGE_PATH + ", timestamp " +
+                "FROM " + TABLE_NAME_BARCODE_STORAGE +
                 " WHERE " + COLUMN_SESSION_ID + " = ?";
 
         Cursor cursor = db.rawQuery(query, new String[]{sessionID});
@@ -98,10 +101,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 // Handle possible -1 indexes if column not found
+                int timestampIndex = cursor.getColumnIndex("timestamp");
                 String barcode = barcodeIndex != -1 ? cursor.getString(barcodeIndex) : "";
                 String imagePath = imagePathIndex != -1 ? cursor.getString(imagePathIndex) : null;
-
-                entries.add(new BarcodeEntry(barcode, imagePath));
+                String timestamp = timestampIndex != -1 ? cursor.getString(timestampIndex) : "";
+                entries.add(new BarcodeEntry(barcode, imagePath, timestamp));
             } while (cursor.moveToNext());
         }
         cursor.close();
