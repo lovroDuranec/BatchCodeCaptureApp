@@ -51,7 +51,7 @@ public class DatabaseHelperTest {
     @Test
     public void testGetAllSessions() {
         db.addentry("barcode1", "/image1");
-        db.updateSessionID();
+        db.updateSessionIDTest();
         db.addentry("barcode2", "/image2");
 
         List<String> sessions = db.getAllSessions();
@@ -63,7 +63,7 @@ public class DatabaseHelperTest {
     @Test
     public void testUpdateSessionID() {
         int initialSessionId = DatabaseHelper.defaultSessionId;
-        db.updateSessionID();
+        db.updateSessionIDTest();
         assertEquals(initialSessionId + 1, DatabaseHelper.defaultSessionId);
     }
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Storage.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String COLUMN_IMAGE_PATH = "image_path";
     private static final String TABLE_NAME_BARCODE_STORAGE = "Barcode_storage";
     private static final String COLUMN_ID = "id";
@@ -64,7 +65,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void updateSessionID(){
+    public void updateSessionID(Context context){
+        defaultSessionId += 1;
+        SharedPreferences prefs = context.getSharedPreferences("session_prefs", Context.MODE_PRIVATE);
+        prefs.edit().putInt("last_session_id", defaultSessionId).apply();
+    }
+    public void updateSessionIDTest(){
         defaultSessionId +=1;
     }
 

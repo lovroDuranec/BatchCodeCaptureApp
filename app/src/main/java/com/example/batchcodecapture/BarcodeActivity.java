@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ public class BarcodeActivity extends AppCompatActivity {
 
         String sessionId = getIntent().getStringExtra("SESSION_ID");
         barcodeEntries = db.getBarcodesForSession(sessionId);
+        Collections.reverse(barcodeEntries);
 
         barcodeAdapter = new BarcodeAdapter(this, barcodeEntries);
         barcodeListView.setAdapter(barcodeAdapter);

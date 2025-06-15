@@ -1,5 +1,6 @@
 package com.example.batchcodecapture;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -50,7 +51,8 @@ public class ScanningActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         dbExecutor = Executors.newSingleThreadExecutor();
         notificationHelper = new NotificationHelper(this, notificationContainer);
-
+        SharedPreferences prefs = getSharedPreferences("session_prefs", MODE_PRIVATE);
+        DatabaseHelper.defaultSessionId = prefs.getInt("last_session_id", 0);
         cameraManager = new CameraManager(this, previewView, this::onBarcodeScanned);
 
         if (hasCameraPermission()) {
@@ -71,7 +73,7 @@ public class ScanningActivity extends AppCompatActivity {
 
             dbExecutor.execute(() -> db.addentry(barcodeData, savedImagePath));
             if (checkIfNewSessionNeeded) {
-                db.updateSessionID();
+                db.updateSessionID(this);
                 checkIfNewSessionNeeded = false;
             }
             runOnUiThread(() -> notificationHelper.showStackedNotification(barcodeData));

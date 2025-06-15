@@ -65,16 +65,16 @@ public class DatabaseHelperTest {
     @Test
     public void testUpdateSessionID() {
         assertEquals(0, DatabaseHelper.defaultSessionId);
-        dbHelper.updateSessionID();
+        dbHelper.updateSessionIDTest();
         assertEquals(1, DatabaseHelper.defaultSessionId);
-        dbHelper.updateSessionID();
+        dbHelper.updateSessionIDTest();
         assertEquals(2, DatabaseHelper.defaultSessionId);
     }
 
     @Test
     public void testGetAllSessions() {
         dbHelper.addentry("111", "/path/1");
-        dbHelper.updateSessionID();
+        dbHelper.updateSessionIDTest();
         dbHelper.addentry("222", "/path/2");
 
         List<String> sessions = dbHelper.getAllSessions();
@@ -87,7 +87,7 @@ public class DatabaseHelperTest {
     public void testGetBarcodesForSession() {
         dbHelper.addentry("111", "/path/1");
         dbHelper.addentry("222", "/path/2");
-        dbHelper.updateSessionID();
+        dbHelper.updateSessionIDTest();
         dbHelper.addentry("333", "/path/3");
         List<BarcodeEntry> entries = dbHelper.getBarcodesForSession("0");
         assertEquals(2, entries.size());
